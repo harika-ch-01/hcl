@@ -1,70 +1,77 @@
-# Getting Started with Create React App
+FrontEnd:
+Technologies : ReactJs , TypeScript
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Pages :
 
-## Available Scripts
+1. Patient Dashboard Main Screen -
+   Landing page , with all the patient upcoming appointments
+   tip of the day
 
-In the project directory, you can run:
+2. Profile Management Page -
+   top right side , profile icon -> Redirect to -> Profile management page
+   User Details - view data -
+   text fields : email , fname, lname. Edit data - phone number
+   text fields : Basic health info - allergies , medications fields
 
-### `npm start`
+BackEnd:
+Technologies : Nodejs , Express , postgres
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+MVC framework :
+Model: Database connectivity , Schemas
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+1. Patient Dashboard Schema
+2. Profile Management Schema
+3. Appointment Bookings Schema
 
-### `npm test`
+Controller: Router & Business Logic
+Patient Dashboard -
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. GET All Appointments - /appointments/:patientName Patient upcoming appointments
+2. GET- /getEach - health tip of the day -
 
-### `npm run build`
+User-Profile:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1.  PUT - /edit/:patientName Patients to edit
+2.  GET- /:patientInfo Patient to view
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Appointments :
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. POST - /book-appointment/:patientName
 
-### `npm run eject`
+View: No View , as we are using ReactJs framework in the frontend
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+UI API Contract :
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+-Book Appointments :
+POST request
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+1. {url}/appointment/:patientName
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+request body:{
+doctorName: String,
+Date:String mm/dd/yyyy
+Time Slots :String
+ReasonForVisit: String
+AdditionalNotes: String
+}
 
-## Learn More
+Follow 2. response format for Error handling
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+2. Handle Errors :
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Response Status Code - 201
+Response :{
+success: "appointment is booked"
+}
 
-### Code Splitting
+errorResponse code -
+401 - unauthorized
+403 - access forbidden
+400 - invalid timeslots , date , doctor name is null
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+{
+errorResponse:{
+statusCode:400/500
+message:"Doctor name cannot be empty or null"
+}
+}
