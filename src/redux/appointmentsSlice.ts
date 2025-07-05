@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { RootState } from "./store.ts";
 
 export interface Appointment {
   doctorName: string;
@@ -27,5 +28,8 @@ const appointmentsSlice = createSlice({
 });
 
 export const { addAppointment } = appointmentsSlice.actions;
+
+export const selectAppointments = (state: RootState) =>
+  state.appointments.appointments;
 
 export default appointmentsSlice.reducer;

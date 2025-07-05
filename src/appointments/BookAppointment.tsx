@@ -11,6 +11,13 @@ import { usePostAppointments } from "../hooks/usePostAppointments.ts";
 
 export const BookAppointment = (): React.ReactElement => {
   const timeSlots = ["10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM"];
+  const [errors, setErrors] = useState({
+    doctorName: "",
+    date: "",
+    time: "",
+    reasonForVisit: "",
+    additionalNotes: "",
+  });
   const [doctorInfo, setDoctorInfo] = useState({
     doctorName: "",
     date: "",
@@ -45,10 +52,41 @@ export const BookAppointment = (): React.ReactElement => {
   };
 
   const handleClick = () => {
-    const errors = validateInputs(doctorInfo);
-    if (errors.length > 0) {
-      //validate the text field errors ,and block the user from making any further request
+    const newErrors: typeof errors = {
+      doctorName: "",
+      date: "",
+      time: "",
+      reasonForVisit: "",
+      additionalNotes: "",
+    };
+
+    let hasError = false;
+
+    if (!doctorInfo.doctorName.trim()) {
+      newErrors.doctorName = "Doctor name is required";
+      hasError = true;
     }
+    if (!doctorInfo.date.trim()) {
+      newErrors.date = "Date is required";
+      hasError = true;
+    }
+    if (!doctorInfo.time.trim()) {
+      newErrors.time = "Time is required";
+      hasError = true;
+    }
+    if (!doctorInfo.reasonForVisit.trim()) {
+      newErrors.reasonForVisit = "Reason for visit is required";
+      hasError = true;
+    }
+    if (!doctorInfo.additionalNotes.trim()) {
+      newErrors.additionalNotes = "Additional notes are required";
+      hasError = true;
+    }
+
+    setErrors(newErrors);
+
+    if (hasError) return;
+
     postAppointment(doctorInfo);
   };
   return (
@@ -58,17 +96,26 @@ export const BookAppointment = (): React.ReactElement => {
         <StyledForm>
           <StyledDiv>
             <label>Select Doctor :</label>
-            <input value={doctorInfo.doctorName} onChange={handleDoctorName} />
+            <input
+              required
+              value={doctorInfo.doctorName}
+              onChange={handleDoctorName}
+            />
+            {errors.doctorName && (
+              <span style={{ color: "red" }}>{errors.doctorName}</span>
+            )}
           </StyledDiv>
           <StyledDiv>
             <label>Select date :</label>{" "}
-            <input type="date" onChange={handleDate} />
+            <input required type="date" onChange={handleDate} />
+            {errors.date && <span style={{ color: "red" }}>{errors.date}</span>}
           </StyledDiv>
           <StyledDiv>
             <label>Select TimeSlot :</label>
             {timeSlots.map((time) => (
               <span>
                 <input
+                  required
                   type="radio"
                   value={time}
                   onChange={handleTime}
@@ -77,10 +124,14 @@ export const BookAppointment = (): React.ReactElement => {
                 {time}
               </span>
             ))}
+            {errors.time && <span style={{ color: "red" }}>{errors.time}</span>}
           </StyledDiv>
           <StyledDiv>
             <label>Reason for Visit:</label>
             <textarea onChange={handleReasonForVisit} />
+            {errors.reasonForVisit && (
+              <span style={{ color: "red" }}>{errors.reasonForVisit}</span>
+            )}
           </StyledDiv>
           <StyledDiv>
             <label>Additional Notes:</label>

@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { PATIENT_ID } from "../constants/constants.ts";
+import { addAppointment } from "../redux/appointmentsSlice.ts";
 
 export const useGetAppointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const dispatch = useDispatch();
 
   const fetchAppointments = async () => {
     try {
@@ -19,7 +22,8 @@ export const useGetAppointments = () => {
       }
       const data = await response.json();
       console.log("data response........", data);
-      setAppointments(data.data || data);
+      setAppointments(data.data);
+      dispatch(addAppointment(data.data));
     } catch (err) {
       setError(err.message || "Something went wrong while fetching");
     } finally {
